@@ -34,8 +34,15 @@ quizzes = [
             "캐나다의 수도는?",
             ["오타와", "브리즈번", "멜버른", "벤쿠버"],
             1
-    ),      
+    ),
+    Quiz(
+        "호주의 수도는?",
+        ["보고타", "로마", "워싱턴 D.C", "캔버라"],
+        4
+    )
 ]
+
+totalProblem = len(quizzes)
 
 def show_board() :
     print("========================================")
@@ -53,20 +60,67 @@ def choice_board() :
         choice = input("선택: ").strip()
 
         if choice == "" :
-            print("입력값이 비어 있습니다. 1-5 사이의 숫자를 입력하세요.")
+            print(f"입력값이 비어 있습니다. 1-5 사이의 숫자를 입력하세요.")
             continue
 
         try :
             choice = int(choice)
         except ValueError :
-            print("잘못된 입력입니다. 1-5 사이의 숫자를 입력하세요.")
+            print(f"잘못된 입력입니다. 1-5 사이의 숫자를 입력하세요.")
             continue
 
         if 1 <= choice <= 5 :
             return choice
 
-        print("잘못된 입력입니다. 1-5 사이의 숫자를 입력하세요.")
+        print(f"잘못된 입력입니다. 1-5 사이의 숫자를 입력하세요.")
 
+def input_number(prompt) :
+    while True :
+        value = input(prompt).strip()
+
+        if value == "" :
+            print("입력값이 비어 있습니다. 1-4 사이의 숫자를 입력하세요.")
+            continue
+
+        try :
+            num = int(value)
+
+        except ValueError :
+            print(f"잘못된 입력입니다. 1-4 사이의 숫자를 입력하세요.")
+            continue
+
+        if 1 <= num <= 4 :
+            return num
+
+        print(f"잘못된 입력입니다. 1-4 사이의 숫자를 입력하세요.")
+
+def play_quiz() :
+    if len(quizzes) == 0:
+        print("등록된 퀴즈가 없습니다.")
+        return
+
+    score = 0
+
+    print()
+    print(f"퀴즈를 시작합니다! 총 {totalProblem}문제입니다.\n")
+
+    for idx, quiz in enumerate(quizzes, start = 1) :
+        print("========================================\n")
+        print(f"[문제 {idx}]")
+        quiz.show_question()
+
+        user_answer = input_number("정답 입력 : ")
+
+        if quiz.check_answer(user_answer) :
+            print("정답입니다!\n")
+            score += 1
+
+        else :
+            print(f"오답입니다. 정답은 {quiz.answer}번입니다.\n")
+
+    print("========================================")
+    print(f"결과 : {totalProblem}문제 중 {score}문제 정답!")
+    print("========================================")
 
 def main() :
     while True :
@@ -74,7 +128,7 @@ def main() :
         choice = choice_board()
 
         if choice == 1:
-            print("퀴즈 풀기")
+            play_quiz()
         elif choice == 2:
             print("퀴즈 추가")
         elif choice == 3:
