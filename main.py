@@ -1,3 +1,4 @@
+import json
 class Quiz :
     #question : 문제, choices : 4개의 선택지 리스트, answer : 정답 번호, 1~4
     def __init__(self, question, choices, answer) :
@@ -13,6 +14,12 @@ class Quiz :
     def check_answer(self, user_answer) :
         return self.answer == user_answer
 
+    def to_dict(self) :
+        return{
+            "question" : self.question,
+            "choices" : self.choices,
+            "answer" : self.answer
+        }
 
 quizzes = [
     Quiz(
@@ -42,6 +49,53 @@ quizzes = [
     )
 ]
 
+def save_state() :
+    data = {
+        "quizzes" : [],
+        "best_score" : best_score,
+        "best_total" : best_total
+    }
+    for quiz in quizzes :
+        data["quizzes"].append(quiz.to_dict())
+
+    try :
+        with open(STATE_FILE, "w", encoding = "utf-8") as file :
+            json.dump(data, file, ensure_ascii = False, indent = 4)
+
+    except OSError :
+        print("데이터 저장 중 오류가 발생하였습니다.")
+
+
+def load_state() :
+    global quizzes, best_score, best_total
+
+    try :
+        with open(STATE_FILE, "r", encoding = "utf-8") as file :
+            data = json.load(file)
+
+        loaded_quizzes = []
+        for quiz_data in data["quizzes"] :
+            quiz = Quiz(
+                quiz_data["question"],
+                quiz_data["choices"],
+                quiz_data["answer"]
+            )
+            loaded_quizzes.append(quiz)
+
+        quizzes = loaded_quizzes
+        best_score = data.get("best_score", 0)
+        best_total = data.get("best_total", 0)
+
+        print(f"저장된 데이터를 불러왔습니다. 퀴즈 {len(quizzes)}개")
+
+    except FileNotFoundError :
+        print("저장 파일이 없어 기본 퀴즈 데이터를 사용합니다.")
+    except (json.JSONDecodeError, KeyError, TypeError) :
+        print("저장 파일이 손상되어 기본 퀴즈 데이터를 사용합니다.")
+    except OSError :
+        print("데이터 파일을 읽는 중 오류가 발생하여 기본 퀴즈 데이터를 사용합니다.")
+
+STATE_FILE = "state.json"
 best_score = 0
 best_total = 0
 
@@ -134,10 +188,11 @@ def play_quiz() :
     print("========================================")
     print(f"결과 : {len(quizzes)}문제 중 {score}문제 정답!")
 
-    if score > best_score :
+    if best_total == 0 or score > best_score :
         best_score = score
         best_total = len(quizzes)
         print("새로운 최고 점수입니다!")
+        save_state()
 
     print("========================================")
 
@@ -158,6 +213,7 @@ def add_quiz() :
     quizzes.append(new_quiz)
 
     print("퀴즈가 추가되었습니다.")
+    save_state()
 
 def show_score() :
     if best_total == 0:
@@ -184,6 +240,8 @@ def show_quiz_list() :
     print("========================================")
 
 def main() :
+    load_state()
+
     while True :
         show_board()
         choice = choice_board()
@@ -206,7 +264,9 @@ if __name__ == "__main__" :
     try :
         main()
     except KeyboardInterrupt :
-        print("프로그램 종료")
+        print("\n프로그램을 안전하게 종료합니다.")
+        save_state()
     except EOFError :
-        print("프로그램 종료")
+        print("\n입력이 종료되어 프로그램을 안전하게 종료합니다.")
+        save_state()
                 
