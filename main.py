@@ -42,8 +42,6 @@ quizzes = [
     )
 ]
 
-totalProblem = len(quizzes)
-
 def show_board() :
     print("========================================")
     print("          🎯 나만의 퀴즈 게임 🎯")
@@ -94,6 +92,16 @@ def input_number(prompt) :
 
         print(f"잘못된 입력입니다. 1-4 사이의 숫자를 입력하세요.")
 
+def input_text(prompt) :
+    while True :
+        text = input(prompt).strip()
+
+        if text == "" :
+            print("빈 값은 입력할 수 없습니다.")
+            continue
+
+        return text
+
 def play_quiz() :
     if len(quizzes) == 0:
         print("등록된 퀴즈가 없습니다.")
@@ -102,7 +110,7 @@ def play_quiz() :
     score = 0
 
     print()
-    print(f"퀴즈를 시작합니다! 총 {totalProblem}문제입니다.\n")
+    print(f"퀴즈를 시작합니다! 총 {len(quizzes)}문제입니다.\n")
 
     for idx, quiz in enumerate(quizzes, start = 1) :
         print("========================================\n")
@@ -119,8 +127,26 @@ def play_quiz() :
             print(f"오답입니다. 정답은 {quiz.answer}번입니다.\n")
 
     print("========================================")
-    print(f"결과 : {totalProblem}문제 중 {score}문제 정답!")
+    print(f"결과 : {len(quizzes)}문제 중 {score}문제 정답!")
     print("========================================")
+
+def add_quiz() :
+    print()
+    print("새로운 퀴즈를 추가합니다.")
+
+    question = input_text("문제를 입력하세요: ")
+
+    choices = []
+    for idx in range(1, 5) :
+        choice = input_text(f"선택지 {idx}: ")
+        choices.append(choice)
+
+    answer = input_number("정답 번호 (1~4) : ")
+
+    new_quiz = Quiz(question, choices, answer)
+    quizzes.append(new_quiz)
+
+    print("퀴즈가 추가되었습니다.")
 
 def main() :
     while True :
@@ -130,7 +156,7 @@ def main() :
         if choice == 1:
             play_quiz()
         elif choice == 2:
-            print("퀴즈 추가")
+            add_quiz()
         elif choice == 3:
             print("퀴즈 목록")
         elif choice == 4:
