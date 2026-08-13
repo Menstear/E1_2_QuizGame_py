@@ -148,6 +148,20 @@ def add_quiz() :
 
     print("퀴즈가 추가되었습니다.")
 
+def show_quiz_list() :
+    if len(quizzes) == 0 :
+        print("등록된 퀴즈가 없습니다.")
+        return
+
+    print()
+    print(f"등록된 퀴즈 목록 (총 {len(quizzes)}개)")
+    print("========================================")
+
+    for idx, quiz in enumerate(quizzes, start = 1) :
+        print(f"[{idx}] {quiz.question}")
+
+    print("========================================")
+
 def main() :
     while True :
         show_board()
@@ -158,7 +172,7 @@ def main() :
         elif choice == 2:
             add_quiz()
         elif choice == 3:
-            print("퀴즈 목록")
+            show_quiz_list()
         elif choice == 4:
             print("점수 확인")
         elif choice == 5:
