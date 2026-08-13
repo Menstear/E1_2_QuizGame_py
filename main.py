@@ -1,3 +1,18 @@
+class Quiz :
+    #question : 문제, choices : 4개의 선택지 리스트, answer : 정답 번호, 1~4
+    def __init__(self, question, choices, answer) :
+        self.question = question
+        self.choices = choices
+        self.answer = answer
+
+    def show_question(self) :
+        print(self.question)
+        for idx, choice in enumerate(self.choices, start = 1) :
+            print(f"{idx}. {choice}")
+
+    def check_answer(self, user_answer) :
+        return self.answer == user_answer
+
 def show_board() :
     print("========================================")
     print("          🎯 나만의 퀴즈 게임 🎯")
