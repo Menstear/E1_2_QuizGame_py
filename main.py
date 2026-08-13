@@ -42,6 +42,9 @@ quizzes = [
     )
 ]
 
+best_score = 0
+best_total = 0
+
 def show_board() :
     print("========================================")
     print("          🎯 나만의 퀴즈 게임 🎯")
@@ -103,6 +106,8 @@ def input_text(prompt) :
         return text
 
 def play_quiz() :
+    global best_score, best_total
+
     if len(quizzes) == 0:
         print("등록된 퀴즈가 없습니다.")
         return
@@ -128,6 +133,12 @@ def play_quiz() :
 
     print("========================================")
     print(f"결과 : {len(quizzes)}문제 중 {score}문제 정답!")
+
+    if score > best_score :
+        best_score = score
+        best_total = len(quizzes)
+        print("새로운 최고 점수입니다!")
+
     print("========================================")
 
 def add_quiz() :
@@ -147,6 +158,16 @@ def add_quiz() :
     quizzes.append(new_quiz)
 
     print("퀴즈가 추가되었습니다.")
+
+def show_score() :
+    if best_total == 0:
+        print("아직 퀴즈를 푼 기록이 없습니다.")
+        return
+
+    score_percent = int(best_score / best_total * 100)
+
+    print()
+    print(f"최고 점수: {score_percent}점 ({best_total}문제 중 {best_score}문제 정답)")
 
 def show_quiz_list() :
     if len(quizzes) == 0 :
@@ -174,7 +195,7 @@ def main() :
         elif choice == 3:
             show_quiz_list()
         elif choice == 4:
-            print("점수 확인")
+            show_score()
         elif choice == 5:
             print("종료")
             break
