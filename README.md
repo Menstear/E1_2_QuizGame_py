@@ -91,7 +91,12 @@ E1-2/
 ├── main.py
 ├── state.json
 ├── README.md
-└── .gitignore
+├── .gitignore
+└── screenshots/
+    ├── environment_versions.png
+    ├── play_quiz.png
+    ├── add_list_score.png
+    └── git_log_graph.png
 ```
 
 ## 주요 파일 설명
