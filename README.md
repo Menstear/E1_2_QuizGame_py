@@ -327,9 +327,6 @@ git pull
 
 ![git clone result](screenshots/git_clone_result.png)
 
-복제 저장소에서 README 수정 후 commit과 push를 수행한 결과입니다.
-
-![git clone commit push](screenshots/git_clone_commit_push.png)
 
 기존 작업 디렉터리에서 `git pull`을 수행한 결과입니다.
 
